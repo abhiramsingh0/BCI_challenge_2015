@@ -126,7 +126,7 @@ def feature_scaling(features, batch_size, seq_len):
     return X_scaled
 
 def independent_components(features, batch_size,seq_len):
-    ica = FastICA(max_iter=500)
+    ica = FastICA(max_iter=1200, tol = 0.1)
     X_inde = np.zeros(features.shape)
     for index in range(0,batch_size):
         X_inde[index,:seq_len[index],:] = \

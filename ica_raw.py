@@ -64,7 +64,7 @@ for itera in range(0, iter_over_files):
         # scale features to have 0 mean and 1 variance
         scaled_features = feature_scaling(training_features, batch_size,\
                 seq_len)
-        # find indipendent components from given features
+        # find independent components from given features
         inde_features = independent_components(scaled_features, batch_size,\
                 seq_len)
 
