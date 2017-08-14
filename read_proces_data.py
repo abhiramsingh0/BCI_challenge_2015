@@ -121,5 +121,5 @@ def feature_scaling(features, batch_size, seq_len):
     X_scaled = np.zeros(features.shape)
     for index in range(0,batch_size):
         X_scaled[index,:seq_len[index],:] = \
-        preprocessing.scale(X_scaled[index,:seq_len[index],:])
+        preprocessing.scale(features[index,:seq_len[index],:])
     return X_scaled
