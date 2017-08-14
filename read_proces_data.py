@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import csv
+from sklearn import preprocessing
 
 # read train data file names
 file_path = "BCI_chal_2015_data/train/"
@@ -115,3 +116,10 @@ def sample_data(x,y,seq_len,b_size):
     y_permu = y_new[permu_indices]
 
     return (x_permu,s_permu,y_permu)
+
+def feature_scaling(features, batch_size, seq_len):
+    X_scaled = np.zeros(features.shape)
+    for index in range(0,batch_size):
+        X_scaled[index,:seq_len[index],:] = \
+        preprocessing.scale(X_scaled[index,:seq_len[index],:])
+    return X_scaled

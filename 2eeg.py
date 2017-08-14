@@ -5,11 +5,11 @@ from  read_proces_data import *
 sess = tf.InteractiveSession()
 
 # create lstm cell in tensorflow
-hidden_units = 128
+hidden_units = 256
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units =\
         hidden_units,state_is_tuple=True)
 
-batch_size = 60
+batch_size = 200
 x = tf.placeholder(tf.float32, shape = [batch_size,2378,57])
 s_len = tf.placeholder(tf.int32,shape=[batch_size])
 # run lstm over different sequence length
@@ -62,7 +62,7 @@ for itera in range(0, iter_over_files):
         # training features is np array with max size and padding
         training_features, seq_len = prepare_data(features)
 
-        for i in range(0,500):
+        for i in range(0,5000):
             tr_fe, sl , tv =\
             sample_data(training_features,target_values,seq_len,batch_size)
 
@@ -87,15 +87,15 @@ for itera in range(0, iter_over_files):
                 print "accuracy %f"%sk_accuracy
                 print " "
 
-                yfile = observe.eval(feed_dict = {\
-                        x:training_features, s_len:seq_len})
-
-                f1score = metrics.f1_score(target_values,yfile)
-                print "f1-score of file is %f"%f1score
-                fprr, tprr, thresholds = metrics.roc_curve(target_values, yfile, pos_label=1)
-                aucc = metrics.auc(fprr,tprr)
-                print "area under curve of file is %f"%aucc
-                sk_acc = metrics.accuracy_score(target_values,yfile)
-                print "accuracy of file is %f"%sk_acc
-                print " "
+#                yfile = observe.eval(feed_dict = {\
+#                        x:training_features, s_len:seq_len})
+#
+#                f1score = metrics.f1_score(target_values,yfile)
+#                print "f1-score of file is %f"%f1score
+#                fprr, tprr, thresholds = metrics.roc_curve(target_values, yfile, pos_label=1)
+#                aucc = metrics.auc(fprr,tprr)
+#                print "area under curve of file is %f"%aucc
+#                sk_acc = metrics.accuracy_score(target_values,yfile)
+#                print "accuracy of file is %f"%sk_acc
+#                print " "
         break
