@@ -1,6 +1,5 @@
 #import matplotlib.pyplot as plt
 from sklearn import metrics
-from sklearn.decomposition import FastICA
 import tensorflow as tf
 from  read_proces_data import *
 sess = tf.InteractiveSession()
@@ -62,12 +61,12 @@ for itera in range(0, iter_over_files):
         target_values = get_target_values(file_)
         # training features is np array with max size and padding
         training_features, seq_len = prepare_data(features)
-
+        # scale features to have 0 mean and 1 variance
         scaled_features = feature_scaling(training_features, batch_size,\
                 seq_len)
-
-        ica = FastICA()
-        inde_features = ica.fit_transform(scaled_features)
+        # find indipendent components from given features
+        inde_features = independent_components(scaled_features, batch_size,\
+                seq_len)
 
         for i in range(0,3000):
             tr_fe, sl , tv =\

@@ -2,6 +2,7 @@ import numpy as np
 import os
 import csv
 from sklearn import preprocessing
+from sklearn.decomposition import FastICA
 
 # read train data file names
 file_path = "BCI_chal_2015_data/train/"
@@ -121,5 +122,13 @@ def feature_scaling(features, batch_size, seq_len):
     X_scaled = np.zeros(features.shape)
     for index in range(0,batch_size):
         X_scaled[index,:seq_len[index],:] = \
-        preprocessing.scale(features[index,:seq_len[index],:])
+                preprocessing.scale(features[index,:seq_len[index],:])
     return X_scaled
+
+def independent_components(features, batch_size,seq_len):
+    ica = FastICA(max_iter=500)
+    X_inde = np.zeros(features.shape)
+    for index in range(0,batch_size):
+        X_inde[index,:seq_len[index],:] = \
+                ica.fit_transform(features[index,:seq_len[index],:])
+    return X_inde
