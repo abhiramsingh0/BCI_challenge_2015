@@ -30,7 +30,7 @@ target_value = tf.placeholder(tf.float32, shape=[batch_size])
 rv = tf.truncated_normal([lstm_cell.output_size, 1],\
         stddev=0.1,dtype=tf.float32)
 W = tf.Variable(rv,dtype=tf.float32)
-rb = tf.constant(0.1,shape=[batch_size,1],dtype=tf.float32)
+rb = tf.constant(0.1,shape=[1],dtype=tf.float32)
 b = tf.Variable(rb,dtype=tf.float32)
 # initialize variables
 # calculate final output
@@ -38,12 +38,14 @@ logits = tf.matmul(output, W) + b
 observed = tf.sigmoid(logits)
 
 # calculate cost as calculated in logistic classification.
-cost = tf.reduce_mean(-1.0 * target_value * tf.log(observed) - \
-        (1 - target_value) * tf.log(1 - observed))
+logistic_cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(\
+        labels = target_value, logits = logits))
+#cost = tf.reduce_mean(-1.0 * target_value * tf.log(observed) - \
+#        (1 - target_value) * tf.log(1 - observed))
 #cost = tf.reduce_mean(-1 * target_value * tf.log(observed))
 #cost = tf.reduce_mean(tf.square(target_value - observed))
 # optimize the cost
-train_step = tf.train.AdamOptimizer(1e-4).minimize(cost)
+train_step = tf.train.AdamOptimizer(1e-4).minimize(logistic_cost)
 def threshold_fn(array):
     return array >= 0.50
 obser = tf.py_func(threshold_fn,[observed], tf.bool)

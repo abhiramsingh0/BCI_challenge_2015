@@ -43,17 +43,20 @@ b2 = tf.Variable(rb2,dtype=tf.float32)
 # initialize variables
 # calculate final output
 
-o1  = tf.matmul(output, Wo1) + b1
+s1  = tf.matmul(output, Wo1) + b1
+o1 = tf.nn.relu(s1)
 logits  = tf.matmul(o1, Wo2) + b2
 observed = tf.sigmoid(logits)
 
 # calculate cost as calculated in logistic classification.
-cost = tf.reduce_mean(-1.0 * target_value * tf.log(observed) - \
-        (1 - target_value) * tf.log(1 - observed))
+logistic_cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(\
+        labels = target_value, logits = logits))
+#cost = tf.reduce_mean(-1.0 * target_value * tf.log(observed) - \
+#        (1 - target_value) * tf.log(1 - observed))
 #cost = tf.reduce_mean(-1 * target_value * tf.log(observed))
 #cost = tf.reduce_mean(tf.square(target_value - observed))
 # optimize the cost
-train_step = tf.train.AdamOptimizer(1e-4).minimize(cost)
+train_step = tf.train.AdamOptimizer(1e-4).minimize(logistic_cost)
 def threshold_fn(array):
     return array >= 0.50
 obser = tf.py_func(threshold_fn,[observed], tf.bool)
