@@ -47,6 +47,7 @@ s1  = tf.matmul(output, Wo1) + b1
 o1 = tf.nn.relu(s1)
 logits  = tf.matmul(o1, Wo2) + b2
 observed = tf.sigmoid(logits)
+#observed = tf.nn.relu(logits)
 
 # calculate cost as calculated in logistic classification.
 logistic_cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(\
@@ -81,7 +82,7 @@ for itera in range(0, iter_over_files):
         inde_features = independent_components(scaled_features, batch_size,\
                 seq_len)
 
-        for i in range(0,3000):
+        for i in range(0,5000):
             tr_fe, sl , tv =\
             sample_data(inde_features,target_values,seq_len,batch_size)
 
