@@ -50,7 +50,7 @@ observed = tf.sigmoid(logits)
 
 # calculate cost as calculated in logistic classification.
 logistic_cost = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(\
-        labels = target_value, logits = logits))
+        labels = target_value, logits = tf.reshape(logits,[batch_size])))
 #cost = tf.reduce_mean(-1.0 * target_value * tf.log(observed) - \
 #        (1 - target_value) * tf.log(1 - observed))
 #cost = tf.reduce_mean(-1 * target_value * tf.log(observed))
@@ -90,7 +90,7 @@ for itera in range(0, iter_over_files):
 
             if i%100 == 0:
                 print "iteration %d"%i
-                print "cost %f"%cost.eval(feed_dict = {target_value:tv,\
+                print "cost %f"%logistic_cost.eval(feed_dict = {target_value:tv,\
                     x:tr_fe, s_len:sl})
 
                 y = observe.eval(feed_dict = {\
