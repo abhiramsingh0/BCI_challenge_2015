@@ -6,8 +6,13 @@ from sklearn.decomposition import FastICA
 
 # read train data file names
 file_path = "BCI_chal_2015_data/train/"
+test_file_path = "BCI_chal_2015_data/test/"
+
 files = os.listdir(file_path)
+test_files = os.listdir(test_file_path)
+
 file_dir = sorted(files)
+test_file_dir = sorted(test_files)
 
 # read target values from csv file into python list
 def get_target_values(file_name):
@@ -28,9 +33,22 @@ def get_train_data(file_name):
     full_file_path = file_path + file_name
     #print full_file_path
 
-    # read data from file, data is available from row index 0
+    # read data from file, first row is nan due to english words
     data = np.genfromtxt(full_file_path, delimiter=',')
+    # skip first row and send all the remaining data
     return data[1:,:]
+
+# read test data from 1 file at a time
+def get_test_data(file_name):
+    # create full file path 
+    full_file_path = test_file_path + file_name
+    #print full_file_path
+
+    # read data from file, first row is nan due to english words
+    data = np.genfromtxt(full_file_path, delimiter=',')
+    # skip first row and send all the remaining data
+    return data[1:,:]
+
 
 # preprocess data points so that all realted inputs upto feedback events can be
 # accessed just by one index of array.
