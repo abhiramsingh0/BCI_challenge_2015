@@ -52,7 +52,7 @@ def get_test_data(file_name):
 
 # preprocess data points so that all realted inputs upto feedback events can be
 # accessed just by one index of array.
-def prepare_data(features):
+def prepare_data(features,s_len):
     # first reject uncessary features
     updated_feat = features[:,1:-1]
     number_of_columns = updated_feat.shape[1]
@@ -87,7 +87,10 @@ def prepare_data(features):
         rows_per_2darray.append(len(indices))
         data_points.append(updated_feat[indices,:])
 
-    max_rows = max(rows_per_2darray)
+    if 0 == s_len:
+        max_rows = max(rows_per_2darray)
+    else :
+        max_rows = s_len
     DATA = np.zeros((ones_index.shape[1], max_rows,number_of_columns))
     for i in range(ones_index.shape[1]):
         temp_data = np.asarray(data_points[i])
@@ -96,6 +99,33 @@ def prepare_data(features):
 
 #    rows_per_2darray = [rows_per_2darray[i] for i in indices]
     return (DATA, rows_per_2darray)
+
+def find_max_seq_len():
+    max_len = 0
+    print "finding max seq len in train set"
+    for file_ in file_dir:
+        # get features from current indexed file
+        features = get_train_data(file_)
+        # training features is np array with max size and padding
+        training_features, seq_len = prepare_data(features,0)
+        m_len = max(seq_len)
+        if m_len > max_len:
+            max_len = m_len
+    print "finding max seq len in test set"
+
+    for file_ in test_file_dir:
+        # get features from current indexed file
+        features = get_test_data(file_)
+        # training features is np array with max size and padding
+        training_features, seq_len = prepare_data(features,0)
+        m_len = max(seq_len)
+        if m_len > max_len:
+            print m_len
+            print max_len
+            max_len = m_len
+    print "max s_len found"
+    return max_len
+
 
 def sample_data(x,y,seq_len,b_size):
     b_size = b_size/2
