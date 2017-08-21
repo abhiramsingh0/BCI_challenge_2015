@@ -90,7 +90,7 @@ def prepare_data(features,s_len):
     if 0 == s_len:
         max_rows = max(rows_per_2darray)
     else :
-        max_rows = s_len
+        max_rows = s_len + 1
     DATA = np.zeros((ones_index.shape[1], max_rows,number_of_columns))
     for i in range(ones_index.shape[1]):
         temp_data = np.asarray(data_points[i])
@@ -108,6 +108,17 @@ def find_max_seq_len():
         features = get_train_data(file_)
         # training features is np array with max size and padding
         training_features, seq_len = prepare_data(features,0)
+        
+        # check if there is any NaN or Inf entries in data
+        isnan = np.any(np.isnan(training_features))
+        if True == isnan:
+            print "nan entry found for file %s"%file_
+            continue
+        isinf = np.any(np.isinf(training_features))
+        if True == isinf:
+            print "inf entry found for file %s"%file_
+            continue
+        
         m_len = max(seq_len)
         if m_len > max_len:
             max_len = m_len
@@ -118,6 +129,17 @@ def find_max_seq_len():
         features = get_test_data(file_)
         # training features is np array with max size and padding
         training_features, seq_len = prepare_data(features,0)
+        
+        # check if there is any NaN or Inf entries in data
+        isnan = np.any(np.isnan(training_features))
+        if True == isnan:
+            print "nan entry found for file %s"%file_
+            continue
+        isinf = np.any(np.isinf(training_features))
+        if True == isinf:
+            print "inf entry found for file %s"%file_
+            continue
+        
         m_len = max(seq_len)
         if m_len > max_len:
             print m_len
