@@ -152,6 +152,8 @@ def find_max_seq_len():
 def sample_data(x,y,seq_len,b_size):
     b_size = b_size/2
     s_len = np.array(seq_len)
+    x=np.asarray(x)
+    y=np.asarray(y)
 
     zero_indices = [i for i,e in enumerate(y) if e==0]
     x0 = x[zero_indices,:,:]
