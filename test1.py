@@ -1,21 +1,15 @@
-from sklearn import metrics
+#from sklearn import metrics
 import tensorflow as tf
-from  read_proces_data import *
-
-# find max no of times to roll back
-max_seq_len = find_max_seq_len()
-print max_seq_len
-# number of times to iterate over whole training dataset
-#iter_over_files =  1
-#for itera in range(0, iter_over_files):
-#    for file_ in file_dir:
-#        print file_
-#        # get features from current indexed file
-#        features = get_train_data(file_)
-#        # get target values corresponding to this file
-#        target_values = get_target_values(file_)
-#        # training features is np array with max size and padding
-#        training_features, seq_len = prepare_data(features, 0)#max_seq_len)
-#        print training_features.shape[1]
-#        print max(seq_len)
-
+#from  read_proces_data import *
+import numpy as np
+sess = tf.InteractiveSession()
+x = np.ones((60,3260,57),dtype=np.float32)
+size = 128
+num_layers = 4
+def lstm_cell(): 
+    return tf.contrib.rnn.BasicLSTMCell(size,state_is_tuple=True)
+cell = tf.contrib.rnn.MultiRNNCell([lstm_cell() for _ in range(num_layers)], state_is_tuple=True)
+output, state = tf.nn.dynamic_rnn(cell,x,dtype=tf.float32)
+sess.run(tf.global_variables_initializer())
+#print output.eval()
+print cell.output_size
