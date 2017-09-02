@@ -190,17 +190,17 @@ def sample_data(x,y,seq_len,b_size):
 
     return (x_permu,s_permu,y_permu)
 
-def feature_scaling(features, batch_size, seq_len):
+def feature_scaling(features, seq_len):
     X_scaled = np.zeros(features.shape)
-    for index in range(0,batch_size):
+    for index in range(len(seq_len)):
         X_scaled[index,:seq_len[index],:] = \
                 preprocessing.scale(features[index,:seq_len[index],:])
     return X_scaled
 
-def independent_components(features, batch_size,seq_len):
+def independent_components(features, seq_len):
     ica = FastICA(max_iter=1200, tol = 0.1)
     X_inde = np.zeros(features.shape)
-    for index in range(0,batch_size):
+    for index in range(len(seq_len)):
         X_inde[index,:seq_len[index],:] = \
                 ica.fit_transform(features[index,:seq_len[index],:])
     return X_inde
